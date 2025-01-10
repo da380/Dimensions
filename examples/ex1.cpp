@@ -10,11 +10,11 @@ template <NC::Real Real>
 class DimensionedClass : public Dimensions<DimensionedClass<Real>> {
 public:
   // Define the necessary methods.
-  auto LengthScale() const { return static_cast<Real>(6.371e6); }
+  constexpr auto LengthScale() const { return static_cast<Real>(6.371e6); }
 
-  auto DensityScale() const { return static_cast<Real>(5.514e3); }
+  constexpr auto DensityScale() const { return static_cast<Real>(5.514e3); }
 
-  auto TimeScale() const { return static_cast<Real>(1); }
+  constexpr auto TimeScale() const { return static_cast<Real>(1); }
 };
 
 template <NC::Real Real>
@@ -23,9 +23,9 @@ class DimensionedClassWithDefaultTimeScale
                         TimeScaleNotSet> {
 public:
   // Define the necessary methods.
-  auto LengthScale() const { return static_cast<Real>(6.371e6); }
+  constexpr auto LengthScale() const { return static_cast<Real>(6.371e6); }
 
-  auto DensityScale() const { return static_cast<Real>(5.514e3); }
+  constexpr auto DensityScale() const { return static_cast<Real>(5.514e3); }
 };
 
 int main() {
