@@ -48,7 +48,7 @@ public:
 
 ## Inclusion in another CMake project
 
-The library is best included using CMake's  Fetch_Content method. The key additions to the projects CMake file are:
+The library is best included using CMake's  Fetch_Content method. The key additions to the including project's CMake file are:
 ```Cmake
 include(FetchContent)
 FetchContent_Declare(
