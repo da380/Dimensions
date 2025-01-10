@@ -1,6 +1,8 @@
 #pragma once
 
+#include <clocale>
 #include <cmath>
+#include <locale>
 #include <numbers>
 
 #include "NumericConcepts/Functions.hpp"
@@ -15,6 +17,24 @@ template <typename T>
 concept TimeScaleOption =
     std::same_as<T, TimeScaleSet> || std::same_as<T, TimeScaleNotSet>;
 
+template <typename T>
+concept Dimensionable = requires(T t) {
+  { t.LengthScale() } -> NumericConcepts::Real;
+  { t.DensityScale() } -> NumericConcepts::Real;
+  { t.TimeScale() } -> NumericConcepts::Real;
+  requires NumericConcepts::SamePrecision<decltype(t.LengthScale()),
+                                          decltype(t.DensityScale()),
+                                          decltype(t.TimeScale())>;
+};
+
+template <typename T>
+concept DimensionableWithoutTimeScale = requires(T t) {
+  { t.LengthScale() } -> NumericConcepts::Real;
+  { t.DensityScale() } -> NumericConcepts::Real;
+  requires NumericConcepts::SamePrecision<decltype(t.LengthScale()),
+                                          decltype(t.DensityScale())>;
+};
+
 template <typename _Derived, TimeScaleOption Option = TimeScaleSet>
 class Dimensions {
 private:
@@ -22,6 +42,8 @@ private:
       static_cast<long double>(6.67430e-11);
 
 public:
+  // Check _Derived is suitable.
+
   // Defined methods in the derived class.
   constexpr auto LengthScale() const { return Derived().LengthScale(); }
   constexpr auto DensityScale() const { return Derived().DensityScale(); }
@@ -68,10 +90,27 @@ public:
   }
 
 private:
-  constexpr auto &Derived() const {
+  constexpr Dimensionable auto &Derived() const
+    requires std::same_as<Option, TimeScaleSet>
+  {
     return static_cast<const _Derived &>(*this);
   }
-  constexpr auto &Derived() { return static_cast<_Derived &>(*this); }
+  constexpr Dimensionable auto &Derived()
+    requires std::same_as<Option, TimeScaleSet>
+  {
+    return static_cast<_Derived &>(*this);
+  }
+
+  constexpr DimensionableWithoutTimeScale auto &Derived() const
+    requires std::same_as<Option, TimeScaleNotSet>
+  {
+    return static_cast<const _Derived &>(*this);
+  }
+  constexpr DimensionableWithoutTimeScale auto &Derived()
+    requires std::same_as<Option, TimeScaleNotSet>
+  {
+    return static_cast<_Derived &>(*this);
+  }
 };
 
 } // namespace Dimensions
