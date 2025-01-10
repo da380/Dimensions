@@ -28,12 +28,12 @@ int main(){
     // Return the corresponding tractions scale, 
     std::cout << d.TractionScale() << std::endl;    
 }
-
 ```
+
 Optionally, the time-scale can be set to a default value 
-$$
+```math
 T = \frac{1}{\sqrt{\pi G \rho}}
-$$
+```
 where $G$ is the gravitational constant and $\rho$ the density scale. This is shown within the following example:
 ```c++
 class DimensionedClass : public Dimensions::Dimensions<DimensionedClass, Dimensions::TimeScaleNotSet> {
