@@ -23,8 +23,8 @@ add_library(${PROJECT_NAME} INTERFACE)
 target_link_libraries(${PROJECT_NAME} INTERFACE NumericConcepts)
 
 
-option(BUILD_EXAMPLES "Build the example programs" ON)
-if(BUILD_EXAMPLES)
+
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     add_subdirectory(examples)
 endif()
 
