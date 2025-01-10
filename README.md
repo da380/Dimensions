@@ -58,6 +58,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Dimensions)
 ```
+and then the dependency can be added to a given library or target in the usual manner. 
 
 ## Acknowledgements
 
