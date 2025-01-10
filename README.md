@@ -2,8 +2,7 @@
 
 A simple C++ template library for non-dimensionalisation. 
 
-A templated class, ```Dimensions```, is defined that can be incorporated into a user-defined class by CRTP. Within the user-defined class methods to return a length-scale, density scale, and (optionally) time-scale must be defined. Via class inheritance, scales for various derived quantities are then made available. 
-A simple example is as follows:
+A templated class, ```Dimensions```, is defined that can be incorporated into a user-defined class by CRTP. Within the user-defined class methods to return a length-scale, density scale, time-scale, and temperature-scale must be defined. Via class inheritance, scales for various derived quantities are then made available.  A simple example is as follows:
 
 ```c++
 #include <iostream>
@@ -13,9 +12,10 @@ A simple example is as follows:
 class DimensionedClass : public Dimensions::Dimensions<DimensionedClass> {
 public:  
   // Methods returning the required scales in SI units. 
-  constexpr auto LengthScale() const { return 6.371e6; }
-  constexpr auto DensityScale() const { return 5.514e3; }
-  constexpr auto TimeScale() const { return 3600.0; }
+  constexpr auto LengthScale() const { return 6.371e6; } // Radius of the Earth
+  constexpr auto DensityScale() const { return 5.514e3; } // Earth's average density
+  constexpr auto TimeScale() const { return 3600.0; } // One hour
+  constexpr auto TemperatureScale() const { return 273.15; } // 1 degree Celsius.
 };
 
 int main(){
@@ -28,21 +28,6 @@ int main(){
     // Return the corresponding tractions scale, 
     std::cout << d.TractionScale() << std::endl;    
 }
-```
-
-Optionally, the time-scale can be set to a default value 
-```math
-T = \frac{1}{\sqrt{\pi G \rho}}
-```
-where $G$ is the gravitational constant and $\rho$ the density scale. This is shown within the following example:
-```c++
-class DimensionedClass : public Dimensions::Dimensions<DimensionedClass, Dimensions::TimeScaleNotSet> {
-public:  
-  // Methods returning the required scales in SI units. 
-  constexpr auto LengthScale() const { return 6.371e6; }
-  constexpr auto DensityScale() const { return 5.514e3; }  
-};
-
 ```
 
 

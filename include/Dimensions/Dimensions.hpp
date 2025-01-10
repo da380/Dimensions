@@ -8,34 +8,19 @@
 
 namespace Dimensions {
 
-struct TimeScaleSet {};
-struct TimeScaleNotSet {};
-
-template <typename T>
-concept TimeScaleOption =
-    std::same_as<T, TimeScaleSet> || std::same_as<T, TimeScaleNotSet>;
-
 template <typename T>
 concept Dimensionable = requires(T t) {
   { t.LengthScale() } -> NumericConcepts::Real;
   { t.DensityScale() } -> NumericConcepts::Real;
   { t.TimeScale() } -> NumericConcepts::Real;
-  requires NumericConcepts::SamePrecision<decltype(t.LengthScale()),
-                                          decltype(t.DensityScale()),
-                                          decltype(t.TimeScale())>;
+  { t.TemperatureScale() } -> NumericConcepts::Real;
+  requires NumericConcepts::SamePrecision<
+      decltype(t.LengthScale()), decltype(t.DensityScale()),
+      decltype(t.TimeScale()), decltype(t.TemperatureScale())>;
 };
 
-template <typename T>
-concept DimensionableWithoutTimeScale = requires(T t) {
-  { t.LengthScale() } -> NumericConcepts::Real;
-  { t.DensityScale() } -> NumericConcepts::Real;
-  requires NumericConcepts::SamePrecision<decltype(t.LengthScale()),
-                                          decltype(t.DensityScale())>;
-};
-
-template <typename _Derived, TimeScaleOption Option = TimeScaleSet>
-class Dimensions {
-private:
+template <typename _Derived> class Dimensions {
+protected:
   const long double _gravitationalConstant =
       static_cast<long double>(6.67430e-11);
 
@@ -45,20 +30,18 @@ public:
   // Defined methods in the derived class.
   constexpr auto LengthScale() const { return Derived().LengthScale(); }
   constexpr auto DensityScale() const { return Derived().DensityScale(); }
-  constexpr auto TimeScale() const {
-    if constexpr (std::same_as<Option, TimeScaleNotSet>) {
-      using Real = decltype(DensityScale());
-      return static_cast<Real>(1) /
-             std::sqrt(std::numbers::pi_v<Real> * _gravitationalConstant *
-                       DensityScale());
-    } else {
-      return Derived().TimeScale();
-    }
+  constexpr auto TimeScale() const { return Derived().TimeScale(); }
+  constexpr auto TemperatureScale() const {
+    return Derived().TemperatureScale();
   }
 
   // Implied methods.
   constexpr auto GravitationalConstant() const {
     return _gravitationalConstant * DensityScale() * std::pow(TimeScale(), 2);
+  }
+
+  constexpr auto BoltzmannConstant() const {
+    return _boltzmannConstant * TemperatureScale() / EnergyScale();
   }
 
   constexpr auto MassScale() const {
@@ -91,30 +74,11 @@ public:
     return MassScale() * std::pow(VelocityScale(), 2);
   }
 
-  constexpr auto TemperatureScale() const {
-    return EnergyScale() / _boltzmannConstant;
-  }
-
 private:
-  constexpr Dimensionable auto &Derived() const
-    requires std::same_as<Option, TimeScaleSet>
-  {
+  constexpr Dimensionable auto &Derived() const {
     return static_cast<const _Derived &>(*this);
   }
-  constexpr Dimensionable auto &Derived()
-    requires std::same_as<Option, TimeScaleSet>
-  {
-    return static_cast<_Derived &>(*this);
-  }
-
-  constexpr DimensionableWithoutTimeScale auto &Derived() const
-    requires std::same_as<Option, TimeScaleNotSet>
-  {
-    return static_cast<const _Derived &>(*this);
-  }
-  constexpr DimensionableWithoutTimeScale auto &Derived()
-    requires std::same_as<Option, TimeScaleNotSet>
-  {
+  constexpr Dimensionable auto &Derived() {
     return static_cast<_Derived &>(*this);
   }
 };
