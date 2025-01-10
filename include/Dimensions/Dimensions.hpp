@@ -39,9 +39,9 @@ private:
   const long double _gravitationalConstant =
       static_cast<long double>(6.67430e-11);
 
-public:
-  // Check _Derived is suitable.
+  const long double _boltzmannConstant = static_cast<long double>(1.380649e-23);
 
+public:
   // Defined methods in the derived class.
   constexpr auto LengthScale() const { return Derived().LengthScale(); }
   constexpr auto DensityScale() const { return Derived().DensityScale(); }
@@ -85,6 +85,14 @@ public:
 
   constexpr auto PotentialScale() const {
     return AccelerationScale() * LengthScale();
+  }
+
+  constexpr auto EnergyScale() const {
+    return MassScale() * std::pow(VelocityScale(), 2);
+  }
+
+  constexpr auto TemperatureScale() const {
+    return EnergyScale() / _boltzmannConstant;
   }
 
 private:
