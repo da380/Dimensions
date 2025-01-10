@@ -13,9 +13,9 @@ A simple example is as follows:
 class DimensionedClass : public Dimensions::Dimensions<DimensionedClass> {
 public:  
   // Methods returning the required scales in SI units. 
-  auto LengthScale() const { return 6.371e6; }
-  auto DensityScale() const { return 5.514e3; }
-  auto TimeScale() const { return 3600.0; }
+  constexpr auto LengthScale() const { return 6.371e6; }
+  constexpr auto DensityScale() const { return 5.514e3; }
+  constexpr auto TimeScale() const { return 3600.0; }
 };
 
 int main(){
@@ -39,8 +39,8 @@ where $G$ is the gravitational constant and $\rho$ the density scale. This is sh
 class DimensionedClass : public Dimensions::Dimensions<DimensionedClass, Dimensions::TimeScaleNotSet> {
 public:  
   // Methods returning the required scales in SI units. 
-  auto LengthScale() const { return 6.371e6; }
-  auto DensityScale() const { return 5.514e3; }  
+  constexpr auto LengthScale() const { return 6.371e6; }
+  constexpr auto DensityScale() const { return 5.514e3; }  
 };
 
 ```
