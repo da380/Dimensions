@@ -2,7 +2,7 @@
 
 A simple C++ template library for non-dimensionalisation. 
 
-A templated class, ```Dimensions```, is defined that can be incorporated into a user-defined class by CRTP. Within the user-defined class methods to return a length-scale, density scale, and (optionally) time-scale are defined. Via class inheritance, scales for various derived quantities are then made available. 
+A templated class, ```Dimensions```, is defined that can be incorporated into a user-defined class by CRTP. Within the user-defined class methods to return a length-scale, density scale, and (optionally) time-scale must be defined. Via class inheritance, scales for various derived quantities are then made available. 
 A simple example is as follows:
 
 ```c++
