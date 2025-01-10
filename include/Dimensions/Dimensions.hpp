@@ -1,8 +1,6 @@
 #pragma once
 
-#include <clocale>
 #include <cmath>
-#include <locale>
 #include <numbers>
 
 #include "NumericConcepts/Functions.hpp"
