@@ -19,6 +19,7 @@ public:
 int main() {
 
   auto d = DimensionedClass<double>();
+
   std::cout << d.LengthScale() << std::endl;
   std::cout << d.DensityScale() << std::endl;
   std::cout << d.TimeScale() << std::endl;

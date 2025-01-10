@@ -20,7 +20,7 @@ concept Dimensionable = requires(T t) {
 };
 
 template <typename _Derived> class Dimensions {
-protected:
+private:
   const long double _gravitationalConstant =
       static_cast<long double>(6.67430e-11);
 
