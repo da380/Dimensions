@@ -36,7 +36,7 @@ can then be determined using default methods. If ```MassScale``` is set but not 
 \rho = \frac{M}{L^{3}}
 ```
 where $M$ is the mass-scale and $L$ the length-scale. If $\rho$ is set and not $M$, this formula is rearranged.
- The Default time-scale is 
+ The default time-scale is 
 ```math
 T = \frac{1}{\sqrt{\pi G \rho}}
 ```
