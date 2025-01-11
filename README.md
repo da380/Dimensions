@@ -2,7 +2,7 @@
 
 A simple C++ template library for non-dimensionalisation. 
 
-A templated class, ```Dimensions```, is defined that can be incorporated into a user-defined class by CRTP. Within the user-defined class methods to return a length-scale, density scale, time-scale, and temperature-scale must be defined. Via class inheritance, scales for various derived quantities are then made available.  A simple example is as follows:
+A templated class, ```Dimensions```, is defined that can be incorporated into a user-defined class by CRTP. Within the user-defined class methods to return a length-scale, density scale, time-scale, and temperature-scale are be defined. Via class inheritance, scales for various derived quantities are then made available.  A simple example is as follows:
 
 ```c++
 #include <iostream>
@@ -29,6 +29,22 @@ int main(){
     std::cout << d.TractionScale() << std::endl;    
 }
 ```
+
+The method ```LengthScale``` must be set in the derived class, along with one of ```MassScale``` or ```DensityScale```. The other basic scales 
+can then be determined using default methods. If ```MassScale``` is set but not ```DensityScale```, then the density scale is:
+```math
+\rho = \frac{M}{L^{3}}
+```
+where $M$ is the mass-scale and $L$ the length-scale. If $\rho$ is set and not $M$, this formula is rearranged.
+ The Default time-scale is 
+```math
+T = \frac{1}{\sqrt{\pi G \rho}}
+```
+with $G$ the gravitational constant. Finally, the default temperature scale is
+```math
+\Theta = \frac{E}{k} = \frac{M^{2} L^{2} T^{-2}}{k}, 
+```
+where $E$ is the energy scale and $k$ the Boltzmann constant. 
 
 
 ## Inclusion in another CMake project

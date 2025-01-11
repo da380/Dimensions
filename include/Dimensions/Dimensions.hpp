@@ -8,31 +8,55 @@
 
 namespace Dimensions {
 
-template <typename T>
-concept Dimensionable = requires(T t) {
-  { t.LengthScale() } -> NumericConcepts::Real;
-  { t.DensityScale() } -> NumericConcepts::Real;
-  { t.TimeScale() } -> NumericConcepts::Real;
-  { t.TemperatureScale() } -> NumericConcepts::Real;
-  requires NumericConcepts::SamePrecision<
-      decltype(t.LengthScale()), decltype(t.DensityScale()),
-      decltype(t.TimeScale()), decltype(t.TemperatureScale())>;
-};
-
 template <typename _Derived> class Dimensions {
 private:
   const long double _gravitationalConstant =
       static_cast<long double>(6.67430e-11);
-
   const long double _boltzmannConstant = static_cast<long double>(1.380649e-23);
 
 public:
-  // Defined methods in the derived class.
+  // Methods that must be defined in the derived class.
   constexpr auto LengthScale() const { return Derived().LengthScale(); }
-  constexpr auto DensityScale() const { return Derived().DensityScale(); }
-  constexpr auto TimeScale() const { return Derived().TimeScale(); }
+
+  // Methods that can optionally be defined in the derived class. Note that
+  // one of MassScale or DensityScale must be defined.
+  constexpr auto DensityScale() const {
+    const auto &self = Derived();
+    if constexpr (requires { self.DensityScale(); }) {
+      return self.DensityScale();
+    } else if constexpr (requires { self.MassScale(); }) {
+      return self.MassScale() / std::pow(self.LengthScale(), 3);
+    }
+  }
+
+  constexpr auto MassScale() const {
+    const auto &self = Derived();
+    if constexpr (requires { self.MassScale(); }) {
+      return self.MassScale();
+    } else if constexpr (requires { self.DensityScale(); }) {
+      return self.DensityScale() * std::pow(self.LengthScale(), 3);
+    }
+  }
+
+  constexpr auto TimeScale() const {
+    const auto &self = Derived();
+    if constexpr (requires { self.TimeScale(); }) {
+      return Derived().TimeScale();
+    } else {
+      using Real = decltype(DensityScale());
+      return static_cast<Real>(1) /
+             std::sqrt(std::numbers::pi_v<Real> * _gravitationalConstant *
+                       DensityScale());
+    }
+  }
   constexpr auto TemperatureScale() const {
-    return Derived().TemperatureScale();
+    const auto &self = Derived();
+    if constexpr (requires { self.TemperatureScale(); }) {
+      return Derived().TemperatureScale();
+    } else {
+      using Real = decltype(DensityScale());
+      return EnergyScale() / _boltzmannConstant;
+    }
   }
 
   // Implied methods.
@@ -42,10 +66,6 @@ public:
 
   constexpr auto BoltzmannConstant() const {
     return _boltzmannConstant * TemperatureScale() / EnergyScale();
-  }
-
-  constexpr auto MassScale() const {
-    return DensityScale() * std::pow(LengthScale(), 3);
   }
 
   constexpr auto VelocityScale() const { return LengthScale() / TimeScale(); }
@@ -75,11 +95,8 @@ public:
   }
 
 private:
-  constexpr Dimensionable auto &Derived() const {
+  constexpr const auto &Derived() const {
     return static_cast<const _Derived &>(*this);
-  }
-  constexpr Dimensionable auto &Derived() {
-    return static_cast<_Derived &>(*this);
   }
 };
 
