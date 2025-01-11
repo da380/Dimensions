@@ -54,7 +54,6 @@ public:
     if constexpr (requires { self.TemperatureScale(); }) {
       return Derived().TemperatureScale();
     } else {
-      using Real = decltype(DensityScale());
       return EnergyScale() / _boltzmannConstant;
     }
   }
