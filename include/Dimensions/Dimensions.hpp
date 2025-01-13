@@ -17,45 +17,10 @@ private:
 public:
   // Methods that must be defined in the derived class.
   constexpr auto LengthScale() const { return Derived().LengthScale(); }
-
-  // Methods that can optionally be defined in the derived class. Note that
-  // one of MassScale or DensityScale must be defined.
-  constexpr auto DensityScale() const {
-    const auto &self = Derived();
-    if constexpr (requires { self.DensityScale(); }) {
-      return self.DensityScale();
-    } else if constexpr (requires { self.MassScale(); }) {
-      return self.MassScale() / std::pow(self.LengthScale(), 3);
-    }
-  }
-
-  constexpr auto MassScale() const {
-    const auto &self = Derived();
-    if constexpr (requires { self.MassScale(); }) {
-      return self.MassScale();
-    } else if constexpr (requires { self.DensityScale(); }) {
-      return self.DensityScale() * std::pow(self.LengthScale(), 3);
-    }
-  }
-
-  constexpr auto TimeScale() const {
-    const auto &self = Derived();
-    if constexpr (requires { self.TimeScale(); }) {
-      return Derived().TimeScale();
-    } else {
-      using Real = decltype(DensityScale());
-      return static_cast<Real>(1) /
-             std::sqrt(std::numbers::pi_v<Real> * _gravitationalConstant *
-                       DensityScale());
-    }
-  }
+  constexpr auto DensityScale() const { return Derived().DensityScale(); }
+  constexpr auto TimeScale() const { return Derived().TimeScale(); }
   constexpr auto TemperatureScale() const {
-    const auto &self = Derived();
-    if constexpr (requires { self.TemperatureScale(); }) {
-      return Derived().TemperatureScale();
-    } else {
-      return EnergyScale() / _boltzmannConstant;
-    }
+    return Derived().TemperatureScale();
   }
 
   // Implied methods.
@@ -65,6 +30,10 @@ public:
 
   constexpr auto BoltzmannConstant() const {
     return _boltzmannConstant * TemperatureScale() / EnergyScale();
+  }
+
+  constexpr auto MassScale() const {
+    return DensityScale() * std::pow(LengthScale(), 3);
   }
 
   constexpr auto VelocityScale() const { return LengthScale() / TimeScale(); }
