@@ -1,5 +1,5 @@
-#include "Dimensions/Dimensions.hpp"
-#include "NumericConcepts/Numeric.hpp"
+#include "Dimensions.hpp"
+#include "NumericConcepts.hpp"
 #include <iostream>
 
 namespace NC = NumericConcepts;
@@ -11,7 +11,8 @@ class DimensionedClass : public Dimensions<DimensionedClass<Real>> {
 public:
   // Define the necessary methods.
   constexpr auto LengthScale() const { return static_cast<Real>(6.371e6); }
-  constexpr auto DensityScale() const { return static_cast<Real>(5.514e3); }  constexpr auto TimeScale() const { return static_cast<Real>(3600.00); }
+  constexpr auto DensityScale() const { return static_cast<Real>(5.514e3); }
+  constexpr auto TimeScale() const { return static_cast<Real>(3600.00); }
   constexpr auto TemperatureScale() const { return static_cast<Real>(273.15); }
 };
 
