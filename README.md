@@ -31,7 +31,6 @@ int main(){
 ```
 
 
-
 ## Inclusion in another CMake project
 
 The library is best included using CMake's  Fetch_Content method. The key additions to the including project's CMake file are:
