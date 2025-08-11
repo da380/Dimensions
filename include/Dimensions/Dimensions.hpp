@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "NumericConcepts/NumericConcepts.hpp"
+
 /**
  * @file Dimensions.hpp
  * @brief Defines a C++ framework for compile-time dimensional analysis.
@@ -20,13 +22,13 @@ namespace Dimensions {
  * other physical quantities.
  *
  * @tparam Derived_ The concrete derived class that implements the base scales.
- * @tparam Real_ The floating-point type for calculations (e.g., float, double).
+ * @tparam Real The floating-point type for calculations (e.g., float, double).
  */
-template <typename Derived_, typename Real_ = double>
+template <typename Derived_, NumericConcepts::Real Real = double>
 class Dimensions {
  private:
-  const Real_ gravitationalConstant_ = static_cast<Real_>(6.67430e-11);
-  const Real_ boltzmannConstant_ = static_cast<Real_>(1.380649e-23);
+  const Real gravitationalConstant_ = static_cast<Real>(6.67430e-11);
+  const Real boltzmannConstant_ = static_cast<Real>(1.380649e-23);
 
  public:
   /** @name Base Scale Interface
@@ -174,17 +176,17 @@ class Dimensions {
  * primary variable.
  *
  * @tparam Derived_ The final concrete class that implements the unit system.
- * @tparam Real_ The floating-point type for calculations.
+ * @tparam Real The floating-point type for calculations.
  */
-template <typename Derived_, typename Real_ = double>
-class MechanicalDimensions : public Dimensions<Derived_, Real_> {
+template <typename Derived_, NumericConcepts::Real Real = double>
+class MechanicalDimensions : public Dimensions<Derived_, Real> {
  public:
   /**
    * @brief Provides a default temperature scale of 1.0.
-   * @return A scaling factor of 1.0 cast to the appropriate `Real_` type.
+   * @return A scaling factor of 1.0 cast to the appropriate `Real` type.
    */
   constexpr auto TemperatureScale() const noexcept {
-    return static_cast<Real_>(1.0);
+    return static_cast<Real>(1.0);
   }
 };
 
@@ -196,10 +198,10 @@ class MechanicalDimensions : public Dimensions<Derived_, Real_> {
  * derived class. This is the most user-friendly base for mechanical systems.
  *
  * @tparam Derived_ The final concrete class that implements the unit system.
- * @tparam Real_ The floating-point type for calculations.
+ * @tparam Real The floating-point type for calculations.
  */
-template <typename Derived_, typename Real_ = double>
-class MechanicalMassDimensions : public MechanicalDimensions<Derived_, Real_> {
+template <typename Derived_, NumericConcepts::Real Real = double>
+class MechanicalMassDimensions : public MechanicalDimensions<Derived_, Real> {
  private:
   constexpr const auto& Derived() const noexcept {
     return static_cast<const Derived_&>(*this);
