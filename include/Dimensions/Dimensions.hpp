@@ -8,7 +8,7 @@
  * @file Dimensions.hpp
  * @brief Defines a C++ framework for compile-time dimensional analysis.
  * @author David Al-Attar
- * @date August 2025
+ * @date 11 August 2025
  */
 
 namespace Dimensions {
@@ -22,7 +22,8 @@ namespace Dimensions {
  * other physical quantities.
  *
  * @tparam Derived_ The concrete derived class that implements the base scales.
- * @tparam Real The floating-point type for calculations (e.g., float, double).
+ * @tparam Real The numeric type for calculations. Must satisfy the
+ * `NumericConcepts::Real` concept.
  */
 template <typename Derived_, NumericConcepts::Real Real = double>
 class Dimensions {
@@ -32,7 +33,7 @@ class Dimensions {
 
  public:
   /** @name Base Scale Interface
-   * Methods that must be implemented by the inheriting class.
+   * @brief Methods that must be implemented by the inheriting class.
    * @{
    */
 
@@ -68,7 +69,7 @@ class Dimensions {
   /** @} */
 
   /** @name Derived Scales and Dimensionless Constants
-   * Methods that are automatically derived from the base scales.
+   * @brief Methods that are automatically derived from the base scales.
    * @{
    */
 
@@ -176,7 +177,8 @@ class Dimensions {
  * primary variable.
  *
  * @tparam Derived_ The final concrete class that implements the unit system.
- * @tparam Real The floating-point type for calculations.
+ * @tparam Real The numeric type for calculations. Must satisfy the
+ * `NumericConcepts::Real` concept.
  */
 template <typename Derived_, NumericConcepts::Real Real = double>
 class MechanicalDimensions : public Dimensions<Derived_, Real> {
@@ -198,7 +200,8 @@ class MechanicalDimensions : public Dimensions<Derived_, Real> {
  * derived class. This is the most user-friendly base for mechanical systems.
  *
  * @tparam Derived_ The final concrete class that implements the unit system.
- * @tparam Real The floating-point type for calculations.
+ * @tparam Real The numeric type for calculations. Must satisfy the
+ * `NumericConcepts::Real` concept.
  */
 template <typename Derived_, NumericConcepts::Real Real = double>
 class MechanicalMassDimensions : public MechanicalDimensions<Derived_, Real> {
