@@ -1,4 +1,4 @@
-# Dimensions 📐
+# Dimensions 
 
 A modern, header-only C++20 library for type-safe dimensional analysis using compile-time calculations.
 
