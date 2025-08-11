@@ -27,7 +27,7 @@ The easiest way to integrate **Dimensions** is with CMake's `FetchContent`.
 
     FetchContent_Declare(
         Dimensions
-        GIT_REPOSITORY https://your-repository-url/Dimensions.git
+        GIT_REPOSITORY https://github.com/da380/Dimensions
         GIT_TAG        v0.1.0 # Or a specific commit/branch
     )
     FetchContent_MakeAvailable(Dimensions)
