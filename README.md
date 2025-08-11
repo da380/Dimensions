@@ -1,50 +1,49 @@
-# Dimensions
+# Dimensions 📐
 
-A simple C++ template library for non-dimensionalisation. 
+A modern, header-only C++20 library for type-safe dimensional analysis using compile-time calculations.
 
-A templated class, ```Dimensions```, is defined that can be incorporated into a user-defined class by CRTP. Within the user-defined class methods to return a length-scale, density scale, time-scale, and temperature-scale must be defined. Via class inheritance, scales for various derived quantities are then made available.  A simple example is as follows:
+This library provides a framework to define physical unit systems. By specifying a few base scales (e.g., for length, mass, and time), it automatically derives the correct conversion factors for complex quantities like force, energy, and pressure.
 
-```c++
-#include <iostream>
-#include "Dimensions/Dimensions.hpp"
+---
 
-// Set up the dimensioned class, defining the necessary methods. 
-class DimensionedClass : public Dimensions::Dimensions<DimensionedClass> {
-public:  
-  // Methods returning the required scales in SI units. 
-  constexpr auto LengthScale() const { return 6.371e6; } // Radius of the Earth
-  constexpr auto DensityScale() const { return 5.514e3; } // Earth's average density
-  constexpr auto TimeScale() const { return 3600.0; } // One hour
-  constexpr auto TemperatureScale() const { return 273.15; } // 1 degree Celsius.
-};
+## Key Features
 
-int main(){
-    // Form a class instance. 
-    auto d = DimensionedClass();
+-   **Header-Only**: Simply include `Dimensions.hpp` to get started.
+-   **Modern C++**: Takes advantage of C++20 features like `constexpr` for maximum performance.
+-   **Type-Safe**: Reduces the risk of unit-related errors by embedding scales into the type system.
+-   **CMake Integration**: Designed to be effortlessly included in any project using `FetchContent`.
+-   **Customizable Precision**: Choose the floating-point type (`float`, `double`, etc.) that fits your needs.
 
-    // print the corresponding acceleration scale, 
-    std::cout << d.AccelerationScale() << std::endl;
+---
 
-    // Return the corresponding tractions scale, 
-    std::cout << d.TractionScale() << std::endl;    
-}
-```
+## How to Use in Your Project
 
+The easiest way to integrate **Dimensions** is with CMake's `FetchContent`.
 
-## Inclusion in another CMake project
+1.  **Add `FetchContent` to your `CMakeLists.txt`**:
 
-The library is best included using CMake's  Fetch_Content method. The key additions to the including project's CMake file are:
-```Cmake
-include(FetchContent)
-FetchContent_Declare(
-  Dimensions
-  GIT_REPOSITORY https://github.com/da380/Dimensions.git
-  GIT_TAG main
-)
-FetchContent_MakeAvailable(Dimensions)
-```
-and then the dependency can be added to a given library or target in the usual manner. 
+    ```cmake
+    include(FetchContent)
 
-## Acknowledgements
+    FetchContent_Declare(
+        Dimensions
+        GIT_REPOSITORY https://your-repository-url/Dimensions.git
+        GIT_TAG        v0.1.0 # Or a specific commit/branch
+    )
+    FetchContent_MakeAvailable(Dimensions)
+    ```
 
-The CMake files within this project are based on the examples provided in https://github.com/pr0g/cmake-examples.git
+2.  **Link your target to the library**:
+
+    ```cmake
+    add_executable(my_app main.cpp)
+
+    # This automatically handles include paths and dependencies
+    target_link_libraries(my_app PRIVATE Dimensions)
+    ```
+
+---
+
+## License
+
+This project is licensed under the BSD 3-Clause License

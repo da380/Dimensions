@@ -1,6 +1,7 @@
-#include "Dimensions/Dimensions.hpp"
-#include "NumericConcepts.hpp"
 #include <iostream>
+
+#include "Dimensions/Dimensions.hpp"
+#include "NumericConcepts/NumericConcepts.hpp"
 
 namespace NC = NumericConcepts;
 using namespace NC;
@@ -8,7 +9,7 @@ using namespace Dimensions;
 
 template <NC::Real Real>
 class DimensionedClass : public Dimensions<DimensionedClass<Real>> {
-public:
+ public:
   // Define the necessary methods.
   constexpr auto LengthScale() const { return static_cast<Real>(6.371e6); }
   constexpr auto DensityScale() const { return static_cast<Real>(5.514e3); }
@@ -17,7 +18,6 @@ public:
 };
 
 int main() {
-
   auto d = DimensionedClass<double>();
 
   std::cout << d.LengthScale() << std::endl;
