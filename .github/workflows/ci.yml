@@ -40,7 +40,7 @@ jobs:
           cmake -B dimensions/build
           -S dimensions
           -DCMAKE_PREFIX_PATH=${{github.workspace}}/install
-          -DDIMENSIONS_BUILD_TESTS=ON
+          -DBUILD_TESTS=ON
 
       - name: Build Dimensions
         run: cmake --build dimensions/build
@@ -63,7 +63,7 @@ jobs:
         run: >
           cmake -B build
           -S .
-          -DDIMENSIONS_BUILD_TESTS=ON
+          -DBUILD_TESTS=ON
 
       - name: Build Dimensions
         run: cmake --build build
