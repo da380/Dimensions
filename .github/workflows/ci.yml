@@ -35,14 +35,6 @@ jobs:
           cmake --build numeric_concepts/build
           cmake --install numeric_concepts/build
 
-     # --- ADD THESE DEBUGGING STEPS ---
-      - name: 🔎 Inspect installation directory
-        run: ls -R ${{github.workspace}}/install
-
-      - name: 🔎 Inspect installed CMake package file
-        run: cat ${{github.workspace}}/install/lib/cmake/NumericConcepts/NumericConceptsTargets.cmake
-      # --- END OF DEBUGGING STEPS ---
-
       - name: Configure Dimensions
         run: >
           cmake -B dimensions/build
