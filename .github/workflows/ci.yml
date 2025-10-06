@@ -20,12 +20,12 @@ jobs:
       - name: Checkout Dimensions repository
         uses: actions/checkout@v4
         with:
-          path: dimensions # Checkout to a specific subdirectory
+          path: dimensions 
 
       - name: Checkout NumericConcepts repository
         uses: actions/checkout@v4
         with:
-          repository: da380/NumericConcepts # Assumes this is the correct repo path
+          repository: da380/NumericConcepts 
           path: numeric_concepts
 
       - name: Install NumericConcepts
