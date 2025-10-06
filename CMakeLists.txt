@@ -9,6 +9,8 @@ project(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(GNUInstallDirs)
+
 # --- Dependency Handling for NumericConcepts ---
 # First, try to find an installed version of the package.
 find_package(NumericConcepts QUIET)
@@ -51,7 +53,6 @@ endif()
 
 
 # --- Installation and Packaging ---
-include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 # Always install the main Dimensions target
