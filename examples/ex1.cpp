@@ -29,5 +29,4 @@ int main() {
   std::cout << d.ForceScale() << std::endl;
   std::cout << d.TractionScale() << std::endl;
   std::cout << d.MomentScale() << std::endl;
-  std::cout << d.PotentialScale() << std::endl << std::endl;
 }
