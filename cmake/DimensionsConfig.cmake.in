@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# This line is the key: it tells the consuming project to also find NumericConcepts.
+find_dependency(NumericConcepts REQUIRED)
+
+# Include the file that defines the actual library targets (e.g., Dimensions::Dimensions)
+include("${CMAKE_CURRENT_LIST_DIR}/DimensionsTargets.cmake")

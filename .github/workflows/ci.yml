@@ -1,0 +1,72 @@
+name: C++ CI for Dimensions
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  ############################################################
+  # Job 1: Test against a pre-installed NumericConcepts      #
+  ############################################################
+  test-with-install:
+    name: Test with find_package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Dimensions repository
+        uses: actions/checkout@v4
+        with:
+          path: dimensions # Checkout to a specific subdirectory
+
+      - name: Checkout NumericConcepts repository
+        uses: actions/checkout@v4
+        with:
+          repository: da380/NumericConcepts # Assumes this is the correct repo path
+          path: numeric_concepts
+
+      - name: Install NumericConcepts
+        shell: bash
+        run: |
+          cmake -S numeric_concepts -B numeric_concepts/build -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
+          cmake --build numeric_concepts/build
+          cmake --install numeric_concepts/build
+
+      - name: Configure Dimensions
+        run: >
+          cmake -B dimensions/build
+          -S dimensions
+          -DCMAKE_PREFIX_PATH=${{github.workspace}}/install
+          -DDIMENSIONS_BUILD_TESTS=ON
+
+      - name: Build Dimensions
+        run: cmake --build dimensions/build
+
+      - name: Run Dimensions Tests
+        run: cmake --build dimensions/build --target test
+
+  ############################################################
+  # Job 2: Test using FetchContent for the dependency        #
+  ############################################################
+  test-with-fetchcontent:
+    name: Test with FetchContent
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Dimensions repository
+        uses: actions/checkout@v4
+
+      - name: Configure Dimensions
+        run: >
+          cmake -B build
+          -S .
+          -DDIMENSIONS_BUILD_TESTS=ON
+
+      - name: Build Dimensions
+        run: cmake --build build
+
+      - name: Run Dimensions Tests
+        run: cmake --build build --target test
